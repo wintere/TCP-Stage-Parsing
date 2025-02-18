@@ -2,7 +2,7 @@ name: xml-processing
 channels:
   - defaults
 dependencies:
-  - beautifulsoup4=4.12.3
+  - python=3.11.10
   - lxml=5.3.0
   - pandas=2.2.2
 
