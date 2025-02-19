@@ -31,8 +31,6 @@ As a reasonable default configuration, I recommend the following.
 python batch-process.py -o outfile.csv -f EEBO-TCP/EEBO1/P4_XML_TCP/ 
 ```
 
-dIf you want to **disable** the stage-specific parsing, ie. the `XML_Masque` or `XML_Dramatis_Personae` columns, use the `--n` flag. This option is turned off by default.
-
 ### Notes
 * EEBO, ECCO, and Evans each encode identifier information in a slightly different way.
 * As Evans does not have XML files of interest, this parser doesn't perform well on Evans.
