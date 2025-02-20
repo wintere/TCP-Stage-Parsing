@@ -43,18 +43,19 @@ class XMLProcessor():
             # Parse XML file using XPATH (suboptimal)
             tree = etree.parse(fp, self.parser)
             r = tree.getroot()
-            # Get EEBO-specific info
-            for node in r.xpath("//IDG"):
-                if node.attrib.get("R").lower() == "um":
-                    row_dict["TCP"] = node.attrib.get("ID")
             # Get EEBO phase information
             for node in r.xpath("//DATE"):
                 if node.text is not None and "EEBO-TCP" in node.text.upper():
                     eebo_phase = re.findall(PHASE, node.text.upper())
                     if eebo_phase:
                         row_dict["PHASE"] = eebo_phase[0]
-            for t in r.xpath("//TITLE"):
-                row_dict["TITLE"] = t.text
+            for t in r.xpath("//BIBLFULL//TITLESTMT//TITLE"):
+                # Each row should have at least one title, but prefer titles of type 245
+                if "TITLE" not in row_dict or t.attrib.get("TYPE") == "245": 
+                    row_dict["TITLE"] = t.text
+                # Check for alternative title
+                elif t.attrib.get("TYPE") == "alt":
+                    row_dict["ALT_TITLE"] = t.text 
             for author in r.xpath("//AUTHOR"):
                 add_with_seps(row_dict, "AUTHOR", author.text)
             for publisher in r.xpath("//BIBLFULL//PUBLICATIONSTMT//PUBLISHER"):

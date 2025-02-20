@@ -5,10 +5,9 @@ import argparse
 import pandas as pd
 
 
-
 # Traverse a folder of EEBO-TCP P4 XML Files
 def traverse(parser, target_dirs):
-    rows = []
+    rows, ignored, parsed, failed = [], 0, 0, 0
     for collection in target_dirs:
         for root, dirs, files in os.walk(collection):
             for file in files:
@@ -17,6 +16,17 @@ def traverse(parser, target_dirs):
                     row = parser.xml_to_row(fp, file)
                     if row:
                         rows.append(row)
+                        parsed += 1
+                    else:
+                        failed += 1
+                else:
+                    ignored+=1
+                if parsed % 1000 == 0: # Log every 1000 files parsed
+                    print("Parsed", parsed, "files...")
+    print("Finished processing!")
+    print("Parsed", parsed, "files")
+    print("Ignored", ignored, "files")
+    print("Failed to parse", failed, "files")
     return rows
 
 
