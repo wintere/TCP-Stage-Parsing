@@ -55,16 +55,16 @@ class XMLProcessor():
                     row_dict["TITLE"] = t.text
                 # Check for alternative title
                 elif t.attrib.get("TYPE") == "alt":
-                    row_dict["ALT_TITLE"] = t.text 
+                    row_dict["TITLE_ALT"] = t.text 
             for author in r.xpath("//AUTHOR"):
                 add_with_seps(row_dict, "AUTHOR", author.text)
             for publisher in r.xpath("//BIBLFULL//PUBLICATIONSTMT//PUBLISHER"):
                 add_with_seps(row_dict, "PUBLISHER", publisher.text)
             for d in r.xpath("//BIBLFULL//PUBLICATIONSTMT//DATE"):
-                row_dict["RAW_DATE"] =  d.text
+                row_dict["DATE_RAW"] =  d.text
                 if re.match(HAS_DIGITS, d.text):
                     # Populated "cleaned" numeric date by regex
-                    row_dict["CLEANED_DATE"] = clean_date(d.text)
+                    row_dict["DATE_CLEAN"] = clean_date(d.text)
             for z in r.xpath("//BIBLFULL//PUBPLACE"):
                 place = z.text.rstrip(":, ")
                 row_dict["PUBPLACE"] = place

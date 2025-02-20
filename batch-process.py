@@ -44,7 +44,12 @@ def main():
     parser = xmlparser.XMLProcessor(nostage=opts.nostage)
     rows = traverse(parser, opts.folders)
     if rows:
-        metadata = pd.DataFrame.from_records(rows).sort_values(by='FILE')
+        metadata = pd.DataFrame.from_records(rows).sort_index(axis=1).sort_values(by='FILE')
+        # Put key columns first
+        metadata.insert(0, "TITLE", metadata.pop("TITLE"))
+        metadata.insert(0, "AUTHOR", metadata.pop("AUTHOR"))
+        metadata.insert(0, "TCP", metadata.pop("TCP"))
+
         metadata.to_csv(open(opts.outfile, mode="wb"), encoding="utf-8", lineterminator="\n", index=False)
     else:
         print("No TCP-P4 XML files found in folders", opts.folders)
